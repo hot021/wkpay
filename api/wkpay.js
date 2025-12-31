@@ -20,40 +20,38 @@ export default async function handler(req, res) {
     const { amount, order_no } = bodyData;
     if (!amount || !order_no) return res.status(400).json({ error: "Missing amount or order_no" });
 
-    const merAccount = "8892630";
+    const merAccount = "26880083";
     const payType = "16002";
-    const payKey = "d1869ca8e2cde5eef18bae2b4994dbf3";
+    const payKey = "45ff9b3f8d9e19861f5e6edf937db91c";
 
     const dataArr = {
-      mer_no: merAccount,
-      order_amount: amount,
-      order_no: order_no,
-      payemail: "14234361@email.com",
-      payphone: "13888888888",
+      merchantId: merAccount,
+      amount: amount,
+      reference: order_no,
+      customerName: "star_hot",
+      customerEmail: "14234361@email.com",
+      customerPhone: "6013888888888",
       currency: "MYR",
-      paytypecode: payType,
-      method: "trade.create",
-      payname: "star_hot",
-      returnurl: "https://shopify.com/97349927221/account/orders?locale=zh-CN&region_country=MY"
+      payMethod: payType,
+      eventType: "payin.order.create",
+      notifyUrl: "https://shopify.com/97349927221/account/orders?locale=zh-CN&region_country=MY"
     };
 
     const signStr =
-      `currency=${dataArr.currency}` +
-      `&mer_no=${dataArr.mer_no}` +
-      `&method=${dataArr.method}` +
-      `&order_amount=${dataArr.order_amount}` +
-      `&order_no=${dataArr.order_no}` +
-      `&payemail=${dataArr.payemail}` +
-      `&payname=${dataArr.payname}` +
-      `&payphone=${dataArr.payphone}` +
-      `&paytypecode=${dataArr.paytypecode}` +
-      `&returnurl=${dataArr.returnurl}` +
+      `amount=${dataArr.amount}` +
+      `&currency=${dataArr.currency}` +
+      `&customerEmail=${dataArr.customerEmail}` +
+      `&customerName=${dataArr.customerName}` +
+      `&customerPhone=${dataArr.customerPhone}` +
+      `&eventType=${dataArr.eventType}` +
+      `&merchantId=${dataArr.merchantId}` +
+      `&notifyUrl=${dataArr.notifyUrl}` +
       payKey;
 
     dataArr.sign = crypto.createHash("md5").update(signStr).digest("hex");
 
     try {
-      const fetchRes = await fetch("https://wkpluss.com/gateway/", {
+      const fetchRes = await fetch("https://kk888pay.com/api/v1/payment/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dataArr)
@@ -67,4 +65,5 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 }
+
 
