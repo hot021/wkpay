@@ -20,19 +20,19 @@ export default async function handler(req, res) {
     const { amount, order_no } = bodyData;
     if (!amount || !order_no) return res.status(400).json({ error: "Missing amount or order_no" });
 
-    const merAccount = "26880083";
-    const payType = "16002";
+    const merchantId = "26880083";
+    const payMethod = "16002";
     const payKey = "45ff9b3f8d9e19861f5e6edf937db91c";
 
     const dataArr = {
-      merchantId: merAccount,
-      amount: amount,
+      merchantId: merchantId,
       reference: order_no,
+      amount: amount,
       customerName: "star_hot",
       customerEmail: "14234361@email.com",
       customerPhone: "6013888888888",
       currency: "MYR",
-      payMethod: payType,
+      payMethod: payMethod,
       eventType: "payin.order.create",
       notifyUrl: "https://shopify.com/97349927221/account/orders?locale=zh-CN&region_country=MY"
     };
@@ -46,6 +46,7 @@ export default async function handler(req, res) {
       `&eventType=${dataArr.eventType}` +
       `&merchantId=${dataArr.merchantId}` +
       `&notifyUrl=${dataArr.notifyUrl}` +
+      `&reference=${dataArr.reference}` +
       payKey;
 
     dataArr.sign = crypto.createHash("md5").update(signStr).digest("hex");
@@ -65,6 +66,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 }
+
 
 
 
