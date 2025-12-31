@@ -50,13 +50,13 @@ export default async function handler(req, res) {
 
     dataArr.sign = crypto.createHash("md5").update(signStr).digest("hex");
     try {
-      /*const fetchRes = await fetch("https://kk888pay.com/api/v1/payment/", {
+      const fetchRes = await fetch("https://kk888pay.com/api/v1/payment/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dataArr)
       });
-      const result = await fetchRes.json();*/
-      const result = {signStr:signStr}
+      const result = await fetchRes.json();
+      //const result = {signStr:signStr}
       return res.status(200).json(result);
     } catch (err) {
       return res.status(500).json({ error: err.message });
@@ -65,6 +65,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 }
+
 
 
 
